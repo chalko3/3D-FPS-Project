@@ -20,10 +20,15 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         //Player movement
-        _moveInput.x = Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime;
-        _moveInput.z = Input.GetAxis("Vertical") * moveSpeed * Time.deltaTime;
+        //_moveInput.x = Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime;
+        //_moveInput.z = Input.GetAxis("Vertical") * moveSpeed * Time.deltaTime;
+        Vector3 forwardDirection = transform.forward * Input.GetAxis("Vertical");
+        Vector3 horizontalDirection = transform.right * Input.GetAxis("Horizontal");
 
-        _characterController.Move(_moveInput);
+        _moveInput = (forwardDirection + horizontalDirection).normalized;
+        _moveInput *= moveSpeed;
+
+        _characterController.Move(_moveInput * Time.deltaTime);
 
         //Control camera rotation
         Vector2 mouseInput = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y")) * mouseSensitivity;
