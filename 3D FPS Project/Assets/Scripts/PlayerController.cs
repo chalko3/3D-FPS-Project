@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -8,6 +9,8 @@ public class PlayerController : MonoBehaviour
     public float jumpForce = 10f;
     public float gravityModifier = 1f;
     public float mouseSensitivity = 1f;
+    public GameObject bullet;
+    public Transform firePoint;
     public Transform theCamera;
     public Transform groundCheckpoint;
     public LayerMask whatIsGround;
@@ -25,19 +28,19 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         //Store the y velocity
-        float yVelocity = _moveInput.y;
-        
+        float yVeclocity = _moveInput.y;
+
         //Player movement
         //_moveInput.x = Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime;
         //_moveInput.z = Input.GetAxis("Vertical") * moveSpeed * Time.deltaTime;
         Vector3 forwardDirection = transform.forward * Input.GetAxis("Vertical");
         Vector3 horizontalDirection = transform.right * Input.GetAxis("Horizontal");
 
-        _moveInput = (forwardDirection + horizontalDirection).normalized;
+        _moveInput =(forwardDirection + horizontalDirection).normalized;
         _moveInput *= moveSpeed;
 
-        //Player Jumping
-        _moveInput.y = yVelocity;
+        //Player jumping setup
+        _moveInput.y = yVeclocity;
         _moveInput.y += Physics.gravity.y * gravityModifier * Time.deltaTime;
 
         if(_characterController.isGrounded)
@@ -45,8 +48,10 @@ public class PlayerController : MonoBehaviour
             _moveInput.y = Physics.gravity.y * gravityModifier * Time.deltaTime;
         }
 
+        //Checking to see if player can jump
         _canPlayerJump = Physics.OverlapSphere(groundCheckpoint.position, 0.50f, whatIsGround).Length > 0;
 
+        //Apply a jump force to player
         if(Input.GetKeyDown(KeyCode.Space) && _canPlayerJump)
         {
             _moveInput.y = jumpForce;
@@ -62,5 +67,25 @@ public class PlayerController : MonoBehaviour
 
         //Camera Rotation
         theCamera.rotation = Quaternion.Euler(theCamera.rotation.eulerAngles + new Vector3(-mouseInput.y, 0f, 0f));
+
+        //Handle Shooting
+        if(Input.GetMouseButtonDown(0))
+        {
+            RaycastHit hit;
+
+            if(Physics.Raycast(theCamera.position, theCamera.forward, out hit, 50f))
+            {
+                if(Vector3.Distance(theCamera.position, hit.point) > 2f)
+                {
+                    firePoint.LookAt(hit.point);
+                }
+            }
+            else
+            {
+                firePoint.LookAt(theCamera.position + (theCamera.forward * 30f));
+            }
+                
+            Instantiate(bullet, firePoint.position, firePoint.rotation);
+        }
     }
 }

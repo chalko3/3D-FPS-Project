@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour
@@ -17,18 +18,18 @@ public class Bullet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       //Move bullet
-       _rigidbody.velocity = transform.forward * moveSpeed;
+        //Move bullet
+        _rigidbody.velocity = transform.forward * moveSpeed;
 
-       //Destroy bullet over time
-       lifeTime -= Time.deltaTime;
-       if(lifeTime <= 0)
-       {
-        Destroy(this.gameObject);
-       } 
+        //Destroy bullet over time
+        lifeTime -= Time.deltaTime;
+        if(lifeTime <= 0)
+        {
+            Destroy(this.gameObject);
+        }
     }
 
-    void OnTriggerEnter(Collider other)
+    void OnCollisionEnter(Collision other)
     {
         Destroy(this.gameObject);
     }
