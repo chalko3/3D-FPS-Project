@@ -5785,8 +5785,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetText: {fileID: 698779193}
-  youWonScene: win
-  youLostScene: lose
+  youWonScene: You Win
+  youLostScene: You Lose
 --- !u!114 &855040971
 MonoBehaviour:
   m_ObjectHideFlags: 0
