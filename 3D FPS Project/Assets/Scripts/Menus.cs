@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class Menus : MonoBehaviour
 {
     public string levelOne;
+    public string levelTwo;
 
     void Start()
     {
@@ -17,6 +18,15 @@ public class Menus : MonoBehaviour
         if(levelOne == "Level One")
         {
             SceneManager.LoadScene(levelOne);
+        }
+        else
+        {
+            Debug.Log("You don't have the correct scene name");
+        }
+
+        if(levelTwo == "Level Two")
+        {
+            SceneManager.LoadScene(levelTwo);
         }
         else
         {
